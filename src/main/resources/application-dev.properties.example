@@ -1,0 +1,11 @@
+# ============================================================
+# Configurações de Desenvolvimento - Chronos Income
+# ============================================================
+# Copie este arquivo para application-dev.properties e
+# preencha com suas credenciais locais.
+# NUNCA commite o application-dev.properties no Git!
+# ============================================================
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/chronos_income_dev
+spring.datasource.username=SEU_USUARIO_POSTGRES
+spring.datasource.password=SUA_SENHA_POSTGRES
