@@ -26,6 +26,7 @@ public class ProjectService {
     private final ClientRepository clientRepository;
     private final AuthHelper authHelper;
 
+    @Transactional
     public ProjectResponse create(ProjectRequest request) {
         User user = authHelper.getLoggedUser();
 
@@ -84,6 +85,7 @@ public class ProjectService {
         return toResponse(getProjectOrThrow(id, user));
     }
 
+    @Transactional
     public ProjectResponse update(Long id, ProjectRequest request) {
         User user = authHelper.getLoggedUser();
         Project project = getProjectOrThrow(id, user);
@@ -110,6 +112,7 @@ public class ProjectService {
         return toResponse(projectRepository.save(project));
     }
 
+    @Transactional
     public ProjectResponse updateStatus(Long id, ProjectStatusRequest request) {
         User user = authHelper.getLoggedUser();
         Project project = getProjectOrThrow(id, user);
