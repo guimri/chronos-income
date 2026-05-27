@@ -18,4 +18,8 @@ public class TimeEntryStartRequest {
 
     @NotNull(message = "Projeto é obrigatório")
     private Long projectId;
+
+    // Quando true, o entry é criado pausado (padrão do calendário)
+    @Builder.Default
+    private boolean startPaused = true;
 }

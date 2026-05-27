@@ -94,11 +94,17 @@ public class TimeEntryService {
                 ? request.getStartTime()
                 : LocalTime.now();
 
+        // Quando startPaused=true (ex: adicionado pelo calendário), o entry
+        // nasce pausado com 0 s acumulados — o usuário inicia manualmente depois
+        TimerStatus initialStatus = request.isStartPaused()
+                ? TimerStatus.PAUSED
+                : TimerStatus.RUNNING;
+
         TimeEntry entry = TimeEntry.builder()
                 .entryDate(entryDate)
                 .startTime(startTime)
                 .type(EntryType.TIMER)
-                .timerStatus(TimerStatus.RUNNING)
+                .timerStatus(initialStatus)
                 .description(request.getDescription())
                 .accumulatedSeconds(0L)
                 .invoiced(false)
