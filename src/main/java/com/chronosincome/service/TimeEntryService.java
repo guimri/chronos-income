@@ -189,6 +189,7 @@ public class TimeEntryService {
     // CONSULTAS
     // -------------------------------------------------------
 
+    @Transactional(readOnly = true)
     public List<TimeEntryResponse> findAll() {
         User user = authHelper.getLoggedUser();
         return timeEntryRepository
@@ -198,6 +199,7 @@ public class TimeEntryService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<TimeEntryResponse> findByPeriod(LocalDate start, LocalDate end) {
         User user = authHelper.getLoggedUser();
 
@@ -214,6 +216,7 @@ public class TimeEntryService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<TimeEntryResponse> findByProject(Long projectId) {
         User user = authHelper.getLoggedUser();
         Project project = getProjectOrThrow(projectId, user);
@@ -223,12 +226,14 @@ public class TimeEntryService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public TimeEntryResponse findById(Long id) {
         User user = authHelper.getLoggedUser();
         return toResponse(getEntryOrThrow(id, user));
     }
 
     // Retorna o temporizador ativo ou pausado (para o React restaurar o estado)
+    @Transactional(readOnly = true)
     public TimeEntryResponse findActiveTimer() {
         User user = authHelper.getLoggedUser();
         return timeEntryRepository

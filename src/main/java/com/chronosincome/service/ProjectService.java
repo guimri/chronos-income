@@ -14,6 +14,7 @@ import com.chronosincome.repository.ProjectRepository;
 import com.chronosincome.util.AuthHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -49,6 +50,7 @@ public class ProjectService {
         return toResponse(projectRepository.save(project));
     }
 
+    @Transactional(readOnly = true)
     public List<ProjectResponse> findAll() {
         User user = authHelper.getLoggedUser();
         return projectRepository.findAllByUser(user)
@@ -57,6 +59,7 @@ public class ProjectService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<ProjectResponse> findAllByStatus(ProjectStatus status) {
         User user = authHelper.getLoggedUser();
         return projectRepository.findAllByUserAndStatus(user, status)
@@ -65,6 +68,7 @@ public class ProjectService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<ProjectResponse> findAllByClient(Long clientId) {
         User user = authHelper.getLoggedUser();
         Client client = getClientOrThrow(clientId, user);
@@ -74,6 +78,7 @@ public class ProjectService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public ProjectResponse findById(Long id) {
         User user = authHelper.getLoggedUser();
         return toResponse(getProjectOrThrow(id, user));

@@ -113,6 +113,7 @@ public class InvoiceService {
     // CONSULTAS
     // -------------------------------------------------------
 
+    @Transactional(readOnly = true)
     public List<InvoiceResponse> findAll() {
         User user = authHelper.getLoggedUser();
         return invoiceRepository.findAllByUserOrderByCreatedAtDesc(user)
@@ -121,6 +122,7 @@ public class InvoiceService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<InvoiceResponse> findAllByStatus(InvoiceStatus status) {
         User user = authHelper.getLoggedUser();
         return invoiceRepository.findAllByUserAndStatusOrderByCreatedAtDesc(user, status)
@@ -129,6 +131,7 @@ public class InvoiceService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<InvoiceResponse> findAllByClient(Long clientId) {
         User user = authHelper.getLoggedUser();
         Client client = getClientOrThrow(clientId, user);
@@ -138,6 +141,7 @@ public class InvoiceService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<InvoiceResponse> findAllByProject(Long projectId) {
         User user = authHelper.getLoggedUser();
         Project project = getProjectOrThrow(projectId, user);
@@ -147,6 +151,7 @@ public class InvoiceService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public InvoiceResponse findById(Long id) {
         User user = authHelper.getLoggedUser();
         return toResponse(getInvoiceOrThrow(id, user));
