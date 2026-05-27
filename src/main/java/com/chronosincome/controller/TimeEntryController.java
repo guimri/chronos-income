@@ -93,8 +93,8 @@ public class TimeEntryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<String> delete(@PathVariable Long id) {
         timeEntryService.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Registro de tempo deletado com sucesso");
     }
 }
