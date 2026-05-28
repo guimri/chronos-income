@@ -21,5 +21,5 @@ public class TimeEntryStartRequest {
 
     // Quando true, o entry é criado pausado (padrão do calendário)
     @Builder.Default
-    private boolean startPaused = true;
+    private boolean startPaused = false;
 }
