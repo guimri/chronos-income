@@ -24,6 +24,7 @@ public class TimeEntryService {
 
     private final TimeEntryRepository timeEntryRepository;
     private final ProjectRepository projectRepository;
+    private final ClientRepository clientRepository;
     private final AuthHelper authHelper;
 
     // -------------------------------------------------------
