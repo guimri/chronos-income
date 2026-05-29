@@ -1,5 +1,6 @@
 package com.chronosincome.repository;
 
+import com.chronosincome.entity.Client;
 import com.chronosincome.entity.Project;
 import com.chronosincome.entity.TimeEntry;
 import com.chronosincome.entity.TimeEntry.TimerStatus;
@@ -23,6 +24,8 @@ public interface TimeEntryRepository extends JpaRepository<TimeEntry, Long> {
             User user, LocalDate start, LocalDate end);
 
     List<TimeEntry> findAllByProjectAndUser(Project project, User user);
+
+    List<TimeEntry> findAllByClientAndUser(Client client, User user);
 
     Optional<TimeEntry> findByIdAndUser(Long id, User user);
 

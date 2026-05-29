@@ -79,6 +79,12 @@ public class TimeEntryController {
         return ResponseEntity.ok(timeEntryService.findByProject(projectId));
     }
 
+    @GetMapping("/clients/{clientId}")
+    public ResponseEntity<List<TimeEntryResponse>> findByClient(
+            @PathVariable Long clientId) {
+        return ResponseEntity.ok(timeEntryService.findByClient(clientId));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<TimeEntryResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(timeEntryService.findById(id));

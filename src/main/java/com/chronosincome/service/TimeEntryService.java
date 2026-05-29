@@ -227,6 +227,17 @@ public class TimeEntryService {
     }
 
     @Transactional(readOnly = true)
+    public List<TimeEntryResponse> findByClient(Long clientId) {
+        User user = authHelper.getLoggedUser();
+        Client client = clientRepository.findByIdAndUser(clientId, user)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado"));
+        return timeEntryRepository.findAllByClientAndUser(client, user)
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
     public TimeEntryResponse findById(Long id) {
         User user = authHelper.getLoggedUser();
         return toResponse(getEntryOrThrow(id, user));
