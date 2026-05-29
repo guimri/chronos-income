@@ -44,6 +44,12 @@ public class InvoiceController {
         return ResponseEntity.ok(invoiceService.findAll());
     }
 
+    @GetMapping("/clients/{clientId}")
+    public ResponseEntity<List<InvoiceResponse>> findByClient(
+            @PathVariable Long clientId) {
+        return ResponseEntity.ok(invoiceService.findAllByClient(clientId));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<InvoiceResponse> findById(@PathVariable Long id) {
         return ResponseEntity.ok(invoiceService.findById(id));
