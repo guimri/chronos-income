@@ -8,6 +8,9 @@ import com.chronosincome.exception.BusinessException;
 import com.chronosincome.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +28,10 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final JavaMailSender mailSender;
+
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
 
     /** Duração do token de reset: 1 hora */
     private static final int RESET_TOKEN_EXPIRY_HOURS = 1;
@@ -87,8 +94,7 @@ public class AuthService {
     }
 
     /**
-     * Gera token de reset e "envia" por e-mail.
-     * Em dev, o token é logado no console. Integre JavaMailSender em produção.
+     * Gera token de reset, salva no usuário e envia e-mail com o link.
      * Sempre retorna sem erro mesmo se o e-mail não existir (anti-enumeração).
      */
     public void forgotPassword(ForgotPasswordRequest request) {
@@ -100,12 +106,7 @@ public class AuthService {
             user.setResetTokenExpiry(LocalDateTime.now().plusHours(RESET_TOKEN_EXPIRY_HOURS));
             userRepository.save(user);
 
-            // TODO: substituir pelo envio real via JavaMailSender
-            log.info("=== [DEV] Link de recuperação de senha ===");
-            log.info("E-mail: {}", user.getEmail());
-            log.info("Token : {}", token);
-            log.info("Link  : http://localhost:5173/reset-password?token={}", token);
-            log.info("==========================================");
+            sendResetEmail(user.getEmail(), user.getName(), token);
         });
     }
 
@@ -131,6 +132,26 @@ public class AuthService {
     // ---------------------------------------------------------------------------
     // Helpers
     // ---------------------------------------------------------------------------
+
+    private void sendResetEmail(String email, String name, String token) {
+        String link = frontendUrl + "/reset-password?token=" + token;
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("Recuperação de senha - Chronos Income");
+        message.setText(
+                "Olá, " + name + "!\n\n"
+                        + "Recebemos uma solicitação para redefinir a senha da sua conta.\n\n"
+                        + "Clique no link abaixo para criar uma nova senha:\n"
+                        + link + "\n\n"
+                        + "O link expira em 1 hora.\n\n"
+                        + "Se você não solicitou a recuperação, ignore este e-mail. "
+                        + "Sua senha permanece a mesma.\n\n"
+                        + "— Equipe Chronos Income"
+        );
+
+        mailSender.send(message);
+    }
 
     private UserDetails buildUserDetails(User user) {
         return org.springframework.security.core.userdetails.User
