@@ -75,7 +75,7 @@ public class SecurityConfig {
         String frontendUrl = System.getenv("FRONTEND_URL");
         List<String> origins = (frontendUrl != null && !frontendUrl.isBlank())
                 ? List.of(frontendUrl.split(","))
-                : List.of("http://localhost:5173");
+                : List.of("http://localhost:5173", "http://localhost:3000" );
 
         config.setAllowedOrigins(origins);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
