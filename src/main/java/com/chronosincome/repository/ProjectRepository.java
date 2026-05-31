@@ -30,7 +30,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     boolean existsByClientAndUserAndStatus(Client client, User user, ProjectStatus status);
 
-    @Query("SELECT COALESCE(SUM(t.hours), 0) FROM TimeEntry t WHERE t.project = :project")
+    @Query("SELECT COALESCE(SUM(t.durationSeconds), 0.0) / 3600 FROM TimeEntry t WHERE t.project = :project")
     BigDecimal sumHoursByProject(@Param("project") Project project);
 
     @Query("SELECT COUNT(p) FROM Project p WHERE p.client = :client")
