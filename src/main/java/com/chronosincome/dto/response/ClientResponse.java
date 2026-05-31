@@ -12,6 +12,7 @@ public class ClientResponse {
     private String name;
     private String fiscalId;
     private String description;
+    private Integer projectCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

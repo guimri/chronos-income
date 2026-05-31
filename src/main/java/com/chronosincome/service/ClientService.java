@@ -7,6 +7,7 @@ import com.chronosincome.entity.User;
 import com.chronosincome.exception.BusinessException;
 import com.chronosincome.exception.ResourceNotFoundException;
 import com.chronosincome.repository.ClientRepository;
+import com.chronosincome.repository.ProjectRepository;
 import com.chronosincome.util.AuthHelper;
 import com.chronosincome.util.FiscalIdValidator;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 public class ClientService {
 
     private final ClientRepository clientRepository;
+    private final ProjectRepository projectRepository;
     private final AuthHelper authHelper;
 
     public ClientResponse create(ClientRequest request) {
@@ -101,6 +103,7 @@ public class ClientService {
                 .name(client.getName())
                 .fiscalId(client.getFiscalId())
                 .description(client.getDescription())
+                .projectCount(projectRepository.countByClient(client))
                 .createdAt(client.getCreatedAt())
                 .updatedAt(client.getUpdatedAt())
                 .build();

@@ -18,11 +18,9 @@ public class ProjectResponse {
     private String description;
     private LocalDate startDate;
     private ProjectStatus status;
-
-    // Dados resumidos do cliente para o React exibir sem precisar de outra chamada
     private Long clientId;
     private String clientName;
-
+    private BigDecimal totalHours;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

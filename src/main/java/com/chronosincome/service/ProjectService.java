@@ -165,6 +165,7 @@ public class ProjectService {
                 .status(project.getStatus())
                 .clientId(project.getClient().getId())
                 .clientName(project.getClient().getName())
+                .totalHours(projectRepository.sumHoursByProject(project))
                 .createdAt(project.getCreatedAt())
                 .updatedAt(project.getUpdatedAt())
                 .build();
