@@ -30,6 +30,34 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
 
     Optional<Invoice> findByIdAndUser(Long id, User user);
 
+    // Filtro por período — invoices cujo período se sobreponha ao intervalo informado
+    @Query("""
+        SELECT i FROM Invoice i
+        WHERE i.user = :user
+        AND i.periodStart <= :periodEnd
+        AND i.periodEnd >= :periodStart
+        ORDER BY i.createdAt DESC
+    """)
+    List<Invoice> findAllByUserAndPeriod(
+            @Param("user") User user,
+            @Param("periodStart") LocalDate periodStart,
+            @Param("periodEnd") LocalDate periodEnd);
+
+    // Filtro por período + status
+    @Query("""
+        SELECT i FROM Invoice i
+        WHERE i.user = :user
+        AND i.status = :status
+        AND i.periodStart <= :periodEnd
+        AND i.periodEnd >= :periodStart
+        ORDER BY i.createdAt DESC
+    """)
+    List<Invoice> findAllByUserAndStatusAndPeriod(
+            @Param("user") User user,
+            @Param("status") InvoiceStatus status,
+            @Param("periodStart") LocalDate periodStart,
+            @Param("periodEnd") LocalDate periodEnd);
+
     // Gera o próximo número sequencial do invoice — ex: INV-2025-001
     @Query("""
         SELECT COUNT(i) FROM Invoice i

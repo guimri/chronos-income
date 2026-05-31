@@ -131,6 +131,25 @@ public class InvoiceService {
                 .toList();
     }
 
+
+    @Transactional(readOnly = true)
+    public List<InvoiceResponse> findAllByPeriod(LocalDate periodStart, LocalDate periodEnd) {
+        User user = authHelper.getLoggedUser();
+        return invoiceRepository.findAllByUserAndPeriod(user, periodStart, periodEnd)
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<InvoiceResponse> findAllByStatusAndPeriod(InvoiceStatus status, LocalDate periodStart, LocalDate periodEnd) {
+        User user = authHelper.getLoggedUser();
+        return invoiceRepository.findAllByUserAndStatusAndPeriod(user, status, periodStart, periodEnd)
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
     @Transactional(readOnly = true)
     public List<InvoiceResponse> findAllByClient(Long clientId) {
         User user = authHelper.getLoggedUser();
