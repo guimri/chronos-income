@@ -9,8 +9,6 @@ import com.chronosincome.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +26,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final JavaMailSender mailSender;
+    private final EmailService emailService;
 
     @Value("${app.frontend.url}")
     private String frontendUrl;
@@ -135,22 +133,7 @@ public class AuthService {
 
     private void sendResetEmail(String email, String name, String token) {
         String link = frontendUrl + "/reset-password?token=" + token;
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject("Recuperação de senha - Chronos Income");
-        message.setText(
-                "Olá, " + name + "!\n\n"
-                        + "Recebemos uma solicitação para redefinir a senha da sua conta.\n\n"
-                        + "Clique no link abaixo para criar uma nova senha:\n"
-                        + link + "\n\n"
-                        + "O link expira em 1 hora.\n\n"
-                        + "Se você não solicitou a recuperação, ignore este e-mail. "
-                        + "Sua senha permanece a mesma.\n\n"
-                        + "— Equipe Chronos Income"
-        );
-
-        mailSender.send(message);
+        emailService.sendPasswordResetEmail(email, name, link);
     }
 
     private UserDetails buildUserDetails(User user) {
